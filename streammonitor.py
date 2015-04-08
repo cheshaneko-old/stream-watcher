@@ -1,19 +1,19 @@
 #!/usr/bin/env python
 
-from apscheduler.schedulers.background import BlockingScheduler
+import time
+from threading import Thread
 import requests
 import requests.packages.urllib3.contrib.pyopenssl
 import logging
 
-
-
-class StreamMonitor:
+class StreamMonitor(Thread):
     LOG_FILE = "monitor.log" 
     STREAM_INFO_URL = "https://api.twitch.tv/kraken/streams/{channel}"
     SUCCESS_STATUS = 200
     TIME_INTERVAL = 10
 
     def __init__(self, channel, callBack):
+        super(StreamMonitor, self).__init__()
         logging.basicConfig(level=logging.DEBUG)
         self.logger = logging.getLogger("stream-monitor")
         self.logger.setLevel(logging.DEBUG)
@@ -28,8 +28,6 @@ class StreamMonitor:
         self.callBack = callBack
         self.channel = channel
 
-        self.sched = BlockingScheduler(timezone="UTC")
-    
     def __checkLive(self):
         r = requests.get(self.STREAM_INFO_URL.format(channel = self.channel))
         if self.SUCCESS_STATUS != r.status_code:
@@ -46,21 +44,10 @@ class StreamMonitor:
 
     def __monitor(self):
         if self.__checkLive():
-            self.sched.remove_all_jobs()
             self.callBack(self.channel)
 
-    def start(self):
-        self.sched.add_job(self.__monitor, trigger='interval', seconds = self.TIME_INTERVAL)
-        self.sched.start()
+    def run(self):
+        while True:
+            self.__monitor()
+            time.sleep(self.TIME_INTERVAL)
 
-def f(x):
-    print("Call")
-    print(x)
-
-def main():
-    s = StreamMonitor("dreadztv", f)
-    s.start()
-    print("Block?")
-
-if __name__ == "__main__":
-    main()
