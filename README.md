@@ -5,4 +5,7 @@ pip install apscheduler
 
 pip install requests
 
+pip install flask
+
 stream-watcher
+
