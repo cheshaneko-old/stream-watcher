@@ -2,6 +2,7 @@
 
 import time
 from threading import Thread
+from threading import Event
 import requests
 import requests.packages.urllib3.contrib.pyopenssl
 import logging
@@ -27,6 +28,9 @@ class StreamMonitor(Thread):
 
         self.callBack = callBack
         self.channel = channel
+        self.status = 'unknow'
+
+        self._stop = Event()
 
     def __checkLive(self):
         r = requests.get(self.STREAM_INFO_URL.format(channel = self.channel))
@@ -37,9 +41,11 @@ class StreamMonitor(Thread):
         json = r.json()
         if ("stream" in json) and (json["stream"] != None):
             self.logger.debug("Channel \"{channel} \" is on".format(channel = self.channel))
+            self.status = 'live'
             return True
         else:
             self.logger.debug("Channel \"{channel} \" is off".format(channel = self.channel))
+            self.status = 'offline'
             return False
 
     def __monitor(self):
@@ -47,7 +53,17 @@ class StreamMonitor(Thread):
             self.callBack(self.channel)
 
     def run(self):
-        while True:
+        while not self.stopped():
             self.__monitor()
             time.sleep(self.TIME_INTERVAL)
+
+    def getStatus(self):
+        return self.status
+
+    def stop(self):
+        self._stop.set()
+
+    def stopped(self):
+        return self._stop.isSet()
+
 
