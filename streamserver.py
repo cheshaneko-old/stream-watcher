@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from flask import Flask, jsonify, make_response, abort, request
+from flask import Flask, jsonify, make_response, abort, request, send_file
 from flask_cors import CORS
 import shelve
 from streamdownloader import StreamDownloader
@@ -93,6 +93,14 @@ def delete_stream(channel):
     d["streams"] = streams
     streamDownloader.delete(channel)
     return jsonify({'result': True})
+
+@app.route('/')
+def index():
+    return send_file('index.html')
+
+@app.route('/streamer.js')
+def index_js():
+    return send_file('streamer.js')
 
 
 
