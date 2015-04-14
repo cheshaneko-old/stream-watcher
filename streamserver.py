@@ -94,16 +94,6 @@ def delete_stream(channel):
     streamDownloader.delete(channel)
     return jsonify({'result': True})
 
-@app.route('/')
-def index():
-    return send_file('index.html')
-
-@app.route('/streamer.js')
-def index_js():
-    return send_file('streamer.js')
-
-
-
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
