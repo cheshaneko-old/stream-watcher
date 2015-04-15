@@ -10,18 +10,17 @@ module.exports = function(grunt) {
                 src: [ '**' ],
                 dest: 'build',
                 expand: true
+            },
+            bower: {
+                cwd: '',
+                src: [ 'bower_components/**/*', 'bower.json' ],
+                dest: 'build',
+                expand: true
             }
         },
         clean: {
             build: {
                 src: [ 'build' ]
-            }
-        },
-        bower: {
-            build: {
-                dest: 'build/bower/',
-                js_dest: 'build/scripts/',
-                css_dest: 'build/styles/'
             }
         },
         includeSource: {
@@ -35,7 +34,26 @@ module.exports = function(grunt) {
                     'build/index.html': 'build/index.html'
                 }
             }
-        }
+        },
+        bowerInstall: {
+            build: {
+                // Point to the files that should be updated when 
+                // you run `grunt bower-install` 
+                src: [
+                    'build/*.html'   // .html support... 
+                ],
+
+                // Optional: 
+                // --------- 
+                cwd: 'build',
+                dependencies: true,
+                devDependencies: false,
+                exclude: [],
+                fileTypes: {},
+                ignorePath: '',
+                overrides: {}
+            }
+        } 
     
         
     });
@@ -43,5 +61,5 @@ module.exports = function(grunt) {
 
     // Task definition
     grunt.registerTask('default', []);
-    grunt.registerTask('build', ['clean:build', 'copy:build', 'bower:build', 'includeSource:build']);
+    grunt.registerTask('build', ['clean:build', 'copy:build', 'copy:bower', 'bowerInstall:build', 'includeSource:build']);
 };
