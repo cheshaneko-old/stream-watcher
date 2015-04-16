@@ -1,0 +1,29 @@
+      <div class="col-xs-12 col-md-4 col-md-offset-4" >
+        <form ng-submit="addChannel()" class="input-group">
+            <div class="input-group-addon">Channel</div>
+<div class="form-group has-error has-feedback">
+          <input ng-model="channel" type="text" class="form-control" ng-pattern="/^[0-9a-zA-Z_]*$/" >
+</div>
+          <span class="input-group-btn">
+            <input class="btn btn-primary" type="submit" value="Add">
+          </span>
+        </form>
+        <div class="list-group">
+          <div class="list-group-item" ng-repeat="stream in streams"> 
+            <a class="list-group-item clearfix">
+                {{stream.channel}}
+                <span ng-switch="stream.channel_status">
+                    <span ng-switch-when="live" class="label label-success">Live</span>
+                    <span ng-switch-when="offline" class="label label-danger">Offline</span>
+                </span> 
+                <span class="pull-right">
+                    <span ng-switch="stream.process_status">
+                        <button ng-switch-when="started" ng-click="stop(stream)" class="btn btn-xs btn-info">Stop</button>
+                        <button ng-switch-when="stopped" ng-click="start(stream)" class="btn btn-xs btn-success">Start</button>
+                    </span> 
+                    <button class="btn btn-xs btn-danger" ng-click="remove(stream)">Delete</button>
+                </span>
+            </a>
+         </div>
+        </div>
+      </div> 

@@ -23,34 +23,26 @@
     </style>
   </head>
   <body>
-      <div class="col-xs-12 col-md-4 col-md-offset-4" ng-controller="StreamerController">
-        <form ng-submit="addChannel()" class="input-group">
-            <div class="input-group-addon">channel</div>
-<div class="form-group has-error has-feedback">
-          <input ng-model="channel" type="text" class="form-control" ng-pattern="/^[0-9a-zA-Z_]*$/" >
-</div>
-          <span class="input-group-btn">
-            <input class="btn btn-primary" type="submit" value="Add">
-          </span>
-        </form>
-        <div class="list-group">
-          <div class="list-group-item" ng-repeat="stream in streams"> 
-            <a href="#" class="list-group-item clearfix">
-                {{stream.channel}}
-                <span ng-switch="stream.channel_status">
-                    <span ng-switch-when="live" class="label label-success">Live</span>
-                    <span ng-switch-when="offline" class="label label-danger">Offline</span>
-                </span> 
-                <span class="pull-right">
-                    <span ng-switch="stream.process_status">
-                        <button ng-switch-when="started" ng-click="stop(stream)" class="btn btn-xs btn-info">Stop</button>
-                        <button ng-switch-when="stopped" ng-click="start(stream)" class="btn btn-xs btn-success">Start</button>
-                    </span> 
-                    <button class="btn btn-xs btn-danger" ng-click="remove(stream)">Delete</button>
-                </span>
-            </a>
-         </div>
+    <nav class="navbar navbar-inverse">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#/">Streamer</a>
         </div>
-      </div> 
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#/">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    <div ng-view></div>
   </body>
 </html>

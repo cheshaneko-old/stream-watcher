@@ -1,4 +1,4 @@
-var streamApp = angular.module('streamerApp', ['ngResource']);
+var streamApp = angular.module('streamerApp', ['ngResource', 'ngRoute']);
 streamApp.controller('StreamerController', function($scope, $http) {
     var loadData = function() {
         $http.get('api/streams').
@@ -38,3 +38,20 @@ streamApp.controller('StreamerController', function($scope, $http) {
             });
     }
 });
+
+streamApp.config(['$routeProvider',
+  function($routeProvider) {
+    $routeProvider.
+      when('/', {
+        templateUrl: 'views/streamer.html',
+        controller: 'StreamerController'
+      })
+      .when('/about', {
+        templateUrl: 'views/about.html',
+        controller: 'StreamerController'
+      })
+      .when('/contact', {
+        templateUrl: 'views/contact.html',
+        controller: 'StreamerController'
+      });
+  }]);
