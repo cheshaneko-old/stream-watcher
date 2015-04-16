@@ -53,7 +53,16 @@ module.exports = function(grunt) {
                 ignorePath: '',
                 overrides: {}
             }
-        } 
+        },
+        watch: {
+            build: {
+                files: 'app/**/*',
+                tasks: ['build'],
+                options: {
+                    spawn: false
+                }
+            }
+        }
     
         
     });
